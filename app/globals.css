@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-background text-gray-800;
+    font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif;
+  }
+}
+
+@layer components {
+  /* 按钮样式 */
+  .btn {
+    @apply px-6 py-2.5 rounded-xl font-medium transition-all duration-200;
+    @apply shadow-sm hover:shadow-md active:scale-95;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white;
+    @apply hover:bg-primary-dark;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-gray-800;
+    @apply hover:bg-secondary-dark;
+  }
+
+  .btn-outline {
+    @apply bg-transparent border-2 border-primary text-primary;
+    @apply hover:bg-primary hover:text-white;
+  }
+
+  /* 输入框样式 */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border-2;
+    @apply bg-white text-gray-800;
+    @apply focus:outline-none focus:border-primary;
+    @apply transition-colors duration-200;
+  }
+
+  /* 卡片样式 */
+  .card {
+    @apply bg-white rounded-2xl shadow-soft;
+    @apply p-6;
+  }
+
+  /* 标签样式 */
+  .badge {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .badge-primary {
+    @apply bg-primary/10 text-primary;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary/20 text-gray-700;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
