@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Shield, User, LogIn, Gamepad2 } from 'lucide-react';
+import { Shield, User, LogIn, Gamepad2, Download } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -91,8 +91,16 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="badge badge-primary">客户端</span>
-                <a href="https://down.cgmsv.com/cgtw_7.1_20220101.7z" className="text-primary hover:underline">
-                  直接下载
+                <a href="https://down.cgmsv.com/cgtw_7.1_20220101.7z" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline flex items-center gap-1">
+                  <Download className="w-3 h-3" />
+                  cgtw_7.1_20220101.7z
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="badge badge-secondary">登录器</span>
+                <a href="/downloads/cgmsv.zip" className="text-primary hover:underline flex items-center gap-1">
+                  <Download className="w-3 h-3" />
+                  cgmsv.zip
                 </a>
               </div>
             </div>
