@@ -47,6 +47,9 @@ interface Character {
   // 统计
   LoginCount: number;
   DeadCount: number;
+  TalkCount: number;
+  GetPetCount: number;
+  WalkCount: number;
 }
 
 export default function ProfilePage() {
@@ -366,14 +369,26 @@ export default function ProfilePage() {
                           <User className="w-4 h-4" />
                           统计信息
                         </h4>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-5 gap-2">
                           <div className="bg-gray-50 rounded-lg p-2 text-center">
-                            <div className="text-xs text-gray-500">登录次数</div>
+                            <div className="text-xs text-gray-500">登录</div>
                             <div className="text-sm font-bold text-gray-700">{char.LoginCount}</div>
                           </div>
                           <div className="bg-gray-50 rounded-lg p-2 text-center">
-                            <div className="text-xs text-gray-500">死亡次数</div>
+                            <div className="text-xs text-gray-500">死亡</div>
                             <div className="text-sm font-bold text-gray-700">{char.DeadCount}</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">聊天</div>
+                            <div className="text-sm font-bold text-gray-700">{char.TalkCount}</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">抓宠</div>
+                            <div className="text-sm font-bold text-gray-700">{char.GetPetCount}</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">步行</div>
+                            <div className="text-sm font-bold text-gray-700">{char.WalkCount}</div>
                           </div>
                         </div>
                       </div>

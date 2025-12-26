@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { query, utf8ToGbk, gbkToUtf8 } from '@/lib/db';
+import { query, utf8ToGbk } from '@/lib/db';
 import { requireAuth } from '@/lib/session';
 
 // 角色资料接口
@@ -32,6 +32,9 @@ export interface Character {
   // 统计字段
   LoginCount: number;
   DeadCount: number;
+  TalkCount: number;
+  GetPetCount: number;
+  WalkCount: number;
 }
 
 export async function GET() {
@@ -65,6 +68,9 @@ export async function GET() {
         c.Charm,
         c.LoginCount,
         c.DeadCount,
+        c.TalkCount,
+        c.GetPetCount,
+        c.WalkCount,
         g.guildName
        FROM tbl_character c
        LEFT JOIN tbl_guild g ON c.guildID = g.guildID
@@ -72,7 +78,7 @@ export async function GET() {
        ORDER BY c.RegistNumber
        LIMIT 2`,
       [accountGbk],
-      false // 不自动转换编码，手动处理Name
+      false // mysql2 驱动已自动转换编码
     );
 
     // 转换职业名称
@@ -94,7 +100,7 @@ export async function GET() {
     };
 
     const formattedCharacters: Character[] = rawCharacters.map((char: any) => ({
-      Name: gbkToUtf8(char.Name),
+      Name: char.Name, // mysql2 驱动已自动转换 GBK->UTF-8
       Lv: char.Lv,
       Job: jobNames[char.MainJob] || '未知',
       Hp: char.Hp,
@@ -107,7 +113,7 @@ export async function GET() {
       X: char.X,
       Y: char.Y,
       MainJob: char.MainJob,
-      GuildName: char.guildName ? gbkToUtf8(char.guildName) : null,
+      GuildName: char.guildName || null,
       // 基础属性（金黄色）- 需除以100
       Str: Math.floor((char.Str || 0) / 100),
       Vital: Math.floor((char.Vital || 0) / 100),
@@ -122,6 +128,9 @@ export async function GET() {
       // 统计
       LoginCount: char.LoginCount || 0,
       DeadCount: char.DeadCount || 0,
+      TalkCount: char.TalkCount || 0,
+      GetPetCount: char.GetPetCount || 0,
+      WalkCount: char.WalkCount || 0,
     }));
 
     return NextResponse.json({
