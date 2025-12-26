@@ -19,7 +19,7 @@ export interface Character {
   X: number;
   Y: number;
   MainJob: number;
-  GuildName?: string;
+  GuildName?: string | null;
   // 基础属性（金黄色，玩家分配点数）
   Str: number;
   Vital: number;

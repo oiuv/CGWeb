@@ -34,7 +34,7 @@ interface Character {
   Floor: number;
   X: number;
   Y: number;
-  GuildName?: string;
+  GuildName?: string | null;
   // 基础属性（金黄色）
   Str: number;
   Vital: number;
