@@ -15,16 +15,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 账号验证规则（与游戏一致：5-15位字母数字下划线）
-    if (!/^\w{5,15}$/.test(account)) {
+    // 账号验证规则（1-15位字母数字下划线）
+    if (!/^\w{1,15}$/.test(account)) {
       return NextResponse.json(
         { success: false, message: '账号格式不正确' },
         { status: 400 }
       );
     }
 
-    // 密码验证规则（与游戏一致：6-15位字母数字）
-    if (!/^[a-zA-Z0-9]{6,15}$/.test(password)) {
+    // 密码验证规则（1-15位字母数字）
+    if (!/^[a-zA-Z0-9]{1,15}$/.test(password)) {
       return NextResponse.json(
         { success: false, message: '密码格式不正确' },
         { status: 400 }
