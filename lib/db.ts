@@ -43,13 +43,19 @@ export function utf8ToGbk(str: string): string {
 // 查询辅助函数 - 自动处理编码转换
 export async function query<T = any>(
   sql: string,
-  params: any[] = []
+  params: any[] = [],
+  convertEncoding = true
 ): Promise<T[]> {
   const connection = await pool.getConnection();
 
   try {
     // 执行查询
     const [rows] = await connection.execute(sql, params);
+
+    // 如果不需要转换编码，直接返回
+    if (!convertEncoding) {
+      return rows as T[];
+    }
 
     // 处理结果中的GBK编码
     const convertRow = (row: any): any => {

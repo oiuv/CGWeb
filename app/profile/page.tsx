@@ -35,14 +35,28 @@ interface Character {
   X: number;
   Y: number;
   GuildName?: string;
+  // 基础属性（金黄色）
   Str: number;
   Vital: number;
   Quick: number;
   Magic: number;
   Power: number;
+  // 状态属性（青色）
+  Atk: number;
+  Def: number;
+  Agi: number;
+  Spirit: number;
+  Regenerate: number;
+  // 其他属性（绿色）
   Dex: number;
   Intelligence: number;
   Charm: number;
+  // 统计
+  LoginCount: number;
+  DieCount: number;
+  PKWinCount: number;
+  PKLoseCount: number;
+  PKCount: number;
 }
 
 export default function ProfilePage() {
@@ -145,10 +159,10 @@ export default function ProfilePage() {
     }
   };
 
-  const formatNumber = (num: number) => {
-    if (num >= 10000) return `${(num / 10000).toFixed(1)}万`;
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
-    return num.toString();
+  const formatNumber = (num: number, useAbbreviation = true) => {
+    if (useAbbreviation && num >= 10000) return `${(num / 10000).toFixed(1)}万`;
+    if (useAbbreviation && num >= 1000) return `${(num / 1000).toFixed(1)}k`;
+    return num.toLocaleString('zh-CN');
   };
 
   const jobColors: Record<string, string> = {
@@ -290,7 +304,7 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <div className="text-xs text-yellow-600">金币</div>
-                          <div className="text-lg font-bold text-yellow-700">{formatNumber(char.Gold)}</div>
+                          <div className="text-lg font-bold text-yellow-700">{formatNumber(char.Gold, false)}</div>
                         </div>
                       </div>
                       <div className="bg-purple-50 rounded-xl p-3 flex items-center gap-3">
@@ -305,43 +319,128 @@ export default function ProfilePage() {
                     </div>
 
                     {/* 战斗属性 */}
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-                        <Sword className="w-4 h-4" />
-                        战斗属性
-                      </h4>
-                      <div className="grid grid-cols-4 gap-3">
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">力量</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Str}</div>
+                    <div className="space-y-4">
+                      {/* 基础属性（金黄色 - 玩家可加点） */}
+                      <div>
+                        <h4 className="text-sm font-medium text-amber-600 mb-3 flex items-center gap-2">
+                          <Sword className="w-4 h-4" />
+                          基础属性
+                        </h4>
+                        <div className="grid grid-cols-5 gap-2">
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-amber-600">体力</div>
+                            <div className="text-lg font-bold text-amber-700">{char.Vital}</div>
+                          </div>
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-amber-600">力量</div>
+                            <div className="text-lg font-bold text-amber-700">{char.Str}</div>
+                          </div>
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-amber-600">强度</div>
+                            <div className="text-lg font-bold text-amber-700">{char.Power}</div>
+                          </div>
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-amber-600">速度</div>
+                            <div className="text-lg font-bold text-amber-700">{char.Quick}</div>
+                          </div>
+                          <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-amber-600">魔法</div>
+                            <div className="text-lg font-bold text-amber-700">{char.Magic}</div>
+                          </div>
                         </div>
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">体力</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Vital}</div>
+                      </div>
+
+                      {/* 状态属性（青色） */}
+                      <div>
+                        <h4 className="text-sm font-medium text-cyan-700 mb-3 flex items-center gap-2">
+                          <Heart className="w-4 h-4" />
+                          状态属性
+                        </h4>
+                        <div className="grid grid-cols-5 gap-2">
+                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-cyan-700">生命</div>
+                            <div className="text-lg font-bold text-cyan-800">{formatNumber(char.Hp, false)}</div>
+                          </div>
+                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-cyan-700">魔力</div>
+                            <div className="text-lg font-bold text-cyan-800">{formatNumber(char.Mp, false)}</div>
+                          </div>
+                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-cyan-700">攻击</div>
+                            <div className="text-lg font-bold text-cyan-800">{char.Atk}</div>
+                          </div>
+                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-cyan-700">防御</div>
+                            <div className="text-lg font-bold text-cyan-800">{char.Def}</div>
+                          </div>
+                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-cyan-700">敏捷</div>
+                            <div className="text-lg font-bold text-cyan-800">{char.Agi}</div>
+                          </div>
+                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-cyan-700">精神</div>
+                            <div className="text-lg font-bold text-cyan-800">{char.Spirit}</div>
+                          </div>
+                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-cyan-700">恢复</div>
+                            <div className="text-lg font-bold text-cyan-800">{char.Regenerate}</div>
+                          </div>
                         </div>
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">速度</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Quick}</div>
+                      </div>
+
+                      {/* 其他属性（绿色） */}
+                      <div>
+                        <h4 className="text-sm font-medium text-green-700 mb-3 flex items-center gap-2">
+                          <Star className="w-4 h-4" />
+                          其他属性
+                        </h4>
+                        <div className="grid grid-cols-4 gap-2">
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-green-700">魅力</div>
+                            <div className="text-lg font-bold text-green-800">{char.Charm}</div>
+                          </div>
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-green-700">耐力</div>
+                            <div className="text-lg font-bold text-green-800">{char.Dex}</div>
+                          </div>
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-green-700">灵巧</div>
+                            <div className="text-lg font-bold text-green-800">{char.Dex}</div>
+                          </div>
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-green-700">智力</div>
+                            <div className="text-lg font-bold text-green-800">{char.Intelligence}</div>
+                          </div>
                         </div>
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">魔法</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Magic}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">腕力</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Power}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">耐力</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Dex}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">智力</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Intelligence}</div>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-2 text-center">
-                          <div className="text-xs text-gray-500">魅力</div>
-                          <div className="text-lg font-bold text-gray-800">{char.Charm}</div>
+                      </div>
+
+                      {/* 统计信息 */}
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          <User className="w-4 h-4" />
+                          统计信息
+                        </h4>
+                        <div className="grid grid-cols-5 gap-2">
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">登录</div>
+                            <div className="text-sm font-bold text-gray-700">{char.LoginCount}</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">死亡</div>
+                            <div className="text-sm font-bold text-gray-700">{char.DieCount}</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">PK胜</div>
+                            <div className="text-sm font-bold text-gray-700">{char.PKWinCount}</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">PK负</div>
+                            <div className="text-sm font-bold text-gray-700">{char.PKLoseCount}</div>
+                          </div>
+                          <div className="bg-gray-50 rounded-lg p-2 text-center">
+                            <div className="text-xs text-gray-500">PK次数</div>
+                            <div className="text-sm font-bold text-gray-700">{char.PKCount}</div>
+                          </div>
                         </div>
                       </div>
                     </div>

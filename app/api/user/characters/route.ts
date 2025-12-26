@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { query, utf8ToGbk } from '@/lib/db';
+import { query, utf8ToGbk, gbkToUtf8 } from '@/lib/db';
 import { requireAuth } from '@/lib/session';
 
 // 角色资料接口
@@ -20,15 +20,28 @@ export interface Character {
   Y: number;
   MainJob: number;
   GuildName?: string;
-  // 显示用的属性
+  // 基础属性（金黄色，玩家分配点数）
   Str: number;
   Vital: number;
   Quick: number;
   Magic: number;
   Power: number;
+  // 状态属性（青色）
+  Atk: number;
+  Def: number;
+  Agi: number;
+  Spirit: number;
+  Regenerate: number;
+  // 其他属性（绿色）
   Dex: number;
   Intelligence: number;
   Charm: number;
+  // 统计字段
+  LoginCount: number;
+  DieCount: number;
+  PKWinCount: number;
+  PKLoseCount: number;
+  PKCount: number;
 }
 
 export async function GET() {
@@ -36,15 +49,15 @@ export async function GET() {
     const session = await requireAuth();
     const accountGbk = utf8ToGbk(session.account);
 
-    // 查询角色信息
-    const characters = await query<any>(
+    // 查询角色信息 - 先查询原始数据
+    const rawCharacters = await query<any>(
       `SELECT
         c.Name,
         c.Lv,
         c.MainJob,
         c.Hp,
-        c.ForcePoint AS MaxHp,
-        c.Vital,
+        c.MaxHp,
+        c.ForcePoint,
         c.Exp,
         c.Gold,
         c.Fame,
@@ -53,20 +66,31 @@ export async function GET() {
         c.X,
         c.Y,
         c.Str,
+        c.Vital,
         c.Quick,
         c.Magic,
         c.Power,
         c.Dex,
         c.Intelligence,
         c.Charm,
-        g.guildName,
-        c.titleID
+        c.Atk,
+        c.Def,
+        c.Agi,
+        c.Spirit,
+        c.Regenerate,
+        c.LoginCount,
+        c.DieCount,
+        c.PKWinCount,
+        c.PKLoseCount,
+        c.PKCount,
+        g.guildName
        FROM tbl_character c
        LEFT JOIN tbl_guild g ON c.guildID = g.guildID
        WHERE c.CdKey = ?
        ORDER BY c.RegistNumber
        LIMIT 2`,
-      [accountGbk]
+      [accountGbk],
+      false // 不自动转换编码，手动处理Name
     );
 
     // 转换职业名称
@@ -87,14 +111,14 @@ export async function GET() {
       13: '刺客',
     };
 
-    const formattedCharacters: Character[] = characters.map((char: any) => ({
-      Name: char.Name,
+    const formattedCharacters: Character[] = rawCharacters.map((char: any) => ({
+      Name: gbkToUtf8(char.Name), // 手动转换名称编码
       Lv: char.Lv,
       Job: jobNames[char.MainJob] || '未知',
       Hp: char.Hp,
       MaxHp: char.MaxHp,
-      Mp: char.Vital, // 游戏中Vital作为魔法值
-      MaxMp: char.Vital,
+      Mp: char.ForcePoint || 0, // 魔力
+      MaxMp: char.ForcePoint || 0,
       Exp: char.Exp,
       Gold: char.Gold,
       Fame: char.Fame,
@@ -103,15 +127,29 @@ export async function GET() {
       X: char.X,
       Y: char.Y,
       MainJob: char.MainJob,
-      GuildName: char.guildName || null,
-      Str: char.Str,
-      Vital: char.Vital,
-      Quick: char.Quick,
-      Magic: char.Magic,
-      Power: char.Power,
-      Dex: char.Dex,
-      Intelligence: char.Intelligence,
-      Charm: char.Charm,
+      GuildName: char.guildName ? gbkToUtf8(char.guildName) : null,
+      // 基础属性（金黄色）- 需除以100
+      Str: Math.floor((char.Str || 0) / 100),
+      Vital: Math.floor((char.Vital || 0) / 100),
+      Quick: Math.floor((char.Quick || 0) / 100),
+      Magic: Math.floor((char.Magic || 0) / 100),
+      Power: Math.floor((char.Power || 0) / 100),
+      // 状态属性（青色）
+      Atk: char.Atk || 0,
+      Def: char.Def || 0,
+      Agi: char.Agi || 0,
+      Spirit: char.Spirit || 0,
+      Regenerate: char.Regenerate || 0,
+      // 其他属性（绿色）
+      Dex: char.Dex || 0,
+      Intelligence: char.Intelligence || 0,
+      Charm: char.Charm || 0,
+      // 统计
+      LoginCount: char.LoginCount || 0,
+      DieCount: char.DieCount || 0,
+      PKWinCount: char.PKWinCount || 0,
+      PKLoseCount: char.PKLoseCount || 0,
+      PKCount: char.PKCount || 0,
     }));
 
     return NextResponse.json({
