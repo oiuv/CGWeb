@@ -241,27 +241,23 @@ export default function ProfilePage() {
               {characters.map((char, index) => (
                 <div key={index} className="card hover:shadow-lg transition-shadow">
                   {/* 角色头部 */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div>
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-2xl font-bold text-gray-800">{char.Name}</h3>
-                        <span className={`badge ${jobColors[char.Job] || 'bg-gray-100 text-gray-700'}`}>
-                          {char.Job}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Star className="w-4 h-4" />
-                          Lv.{char.Lv}
-                        </span>
-                        {char.GuildName && (
-                          <span className="flex items-center gap-1">
-                            <Shield className="w-4 h-4" />
-                            {char.GuildName}
-                          </span>
-                        )}
-                      </div>
+                  <div className="mb-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-2xl font-bold text-gray-800">{char.Name}</h3>
+                      <span className="flex items-center gap-1 text-sm text-gray-600">
+                        <Star className="w-4 h-4" />
+                        Lv.{char.Lv}
+                      </span>
+                      <span className={`badge ${jobColors[char.Job] || 'bg-gray-100 text-gray-700'}`}>
+                        {char.Job}
+                      </span>
                     </div>
+                    {char.GuildName && (
+                      <div className="flex items-center gap-1 text-sm text-gray-500">
+                        <Shield className="w-4 h-4" />
+                        {char.GuildName}
+                      </div>
+                    )}
                   </div>
 
                   {/* 基本属性 */}
@@ -371,10 +367,10 @@ export default function ProfilePage() {
                       {/* 元素属性 */}
                       <div>
                         <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-                          <Star className="w-4 h-4" />
+                          <Zap className="w-4 h-4" />
                           元素属性
                         </h4>
-                        <div className="space-y-2">
+                        <div className="grid grid-cols-2 gap-3">
                           {/* 地 - 绿色 */}
                           <div>
                             <div className="flex items-center justify-between text-xs mb-1">

@@ -33,6 +33,7 @@ export default function LoginPage() {
         setError(data.message || '登录失败');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('网络错误，请稍后重试');
     } finally {
       setLoading(false);
@@ -92,8 +93,8 @@ export default function LoginPage() {
                   value={account}
                   onChange={(e) => setAccount(e.target.value)}
                   className="input"
-                  placeholder="请输入游戏账号（5-15位）"
-                  pattern="^\w{5,15}$"
+                  placeholder="请输入游戏账号"
+                  pattern="^\w{1,15}$"
                   required
                   disabled={loading}
                 />
@@ -110,8 +111,8 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input"
-                  placeholder="请输入密码（6-15位）"
-                  pattern="^[a-zA-Z0-9]{6,15}$"
+                  placeholder="请输入密码"
+                  pattern="^[a-zA-Z0-9]{1,15}$"
                   required
                   disabled={loading}
                 />

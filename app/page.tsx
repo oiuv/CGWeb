@@ -70,7 +70,7 @@ export default function HomePage() {
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-gray-800 mb-2">账号说明</h3>
                   <p className="text-gray-600 text-sm">
-                    游戏内首次登录会自动创建账号，使用游戏账号密码即可登录网站
+                    游戏内首次登录会自动创建账号
                   </p>
                 </div>
               </div>
