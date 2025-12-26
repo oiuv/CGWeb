@@ -24,9 +24,7 @@ interface Character {
   Lv: number;
   Job: string;
   Hp: number;
-  MaxHp: number;
   Mp: number;
-  MaxMp: number;
   Exp: number;
   Gold: number;
   Fame: number;
@@ -38,25 +36,17 @@ interface Character {
   // 基础属性（金黄色）
   Str: number;
   Vital: number;
+  Tough: number;
   Quick: number;
   Magic: number;
-  Power: number;
-  // 状态属性（青色）
-  Atk: number;
-  Def: number;
-  Agi: number;
-  Spirit: number;
-  Regenerate: number;
   // 其他属性（绿色）
+  Power: number;
   Dex: number;
   Intelligence: number;
   Charm: number;
   // 统计
   LoginCount: number;
-  DieCount: number;
-  PKWinCount: number;
-  PKLoseCount: number;
-  PKCount: number;
+  DeadCount: number;
 }
 
 export default function ProfilePage() {
@@ -276,13 +266,7 @@ export default function ProfilePage() {
                           <span>生命值</span>
                         </div>
                         <div className="text-lg font-bold text-red-700">
-                          {char.Hp} / {char.MaxHp}
-                        </div>
-                        <div className="w-full bg-red-200 rounded-full h-2 mt-2">
-                          <div
-                            className="bg-red-500 h-2 rounded-full transition-all"
-                            style={{ width: `${Math.min((char.Hp / char.MaxHp) * 100, 100)}%` }}
-                          />
+                          {formatNumber(char.Hp, false)}
                         </div>
                       </div>
                       <div className="bg-blue-50 rounded-xl p-3">
@@ -291,7 +275,7 @@ export default function ProfilePage() {
                           <span>魔法值</span>
                         </div>
                         <div className="text-lg font-bold text-blue-700">
-                          {char.Mp}
+                          {formatNumber(char.Mp, false)}
                         </div>
                       </div>
                     </div>
@@ -337,7 +321,7 @@ export default function ProfilePage() {
                           </div>
                           <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
                             <div className="text-xs text-amber-600">强度</div>
-                            <div className="text-lg font-bold text-amber-700">{char.Power}</div>
+                            <div className="text-lg font-bold text-amber-700">{char.Tough}</div>
                           </div>
                           <div className="bg-amber-50 border border-amber-200 rounded-lg p-2 text-center">
                             <div className="text-xs text-amber-600">速度</div>
@@ -350,44 +334,6 @@ export default function ProfilePage() {
                         </div>
                       </div>
 
-                      {/* 状态属性（青色） */}
-                      <div>
-                        <h4 className="text-sm font-medium text-cyan-700 mb-3 flex items-center gap-2">
-                          <Heart className="w-4 h-4" />
-                          状态属性
-                        </h4>
-                        <div className="grid grid-cols-5 gap-2">
-                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-cyan-700">生命</div>
-                            <div className="text-lg font-bold text-cyan-800">{formatNumber(char.Hp, false)}</div>
-                          </div>
-                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-cyan-700">魔力</div>
-                            <div className="text-lg font-bold text-cyan-800">{formatNumber(char.Mp, false)}</div>
-                          </div>
-                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-cyan-700">攻击</div>
-                            <div className="text-lg font-bold text-cyan-800">{char.Atk}</div>
-                          </div>
-                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-cyan-700">防御</div>
-                            <div className="text-lg font-bold text-cyan-800">{char.Def}</div>
-                          </div>
-                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-cyan-700">敏捷</div>
-                            <div className="text-lg font-bold text-cyan-800">{char.Agi}</div>
-                          </div>
-                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-cyan-700">精神</div>
-                            <div className="text-lg font-bold text-cyan-800">{char.Spirit}</div>
-                          </div>
-                          <div className="bg-cyan-50 border border-cyan-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-cyan-700">恢复</div>
-                            <div className="text-lg font-bold text-cyan-800">{char.Regenerate}</div>
-                          </div>
-                        </div>
-                      </div>
-
                       {/* 其他属性（绿色） */}
                       <div>
                         <h4 className="text-sm font-medium text-green-700 mb-3 flex items-center gap-2">
@@ -396,12 +342,8 @@ export default function ProfilePage() {
                         </h4>
                         <div className="grid grid-cols-4 gap-2">
                           <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-green-700">魅力</div>
-                            <div className="text-lg font-bold text-green-800">{char.Charm}</div>
-                          </div>
-                          <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-green-700">耐力</div>
-                            <div className="text-lg font-bold text-green-800">{char.Dex}</div>
+                            <div className="text-xs text-green-700">腕力</div>
+                            <div className="text-lg font-bold text-green-800">{char.Power}</div>
                           </div>
                           <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
                             <div className="text-xs text-green-700">灵巧</div>
@@ -410,6 +352,10 @@ export default function ProfilePage() {
                           <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
                             <div className="text-xs text-green-700">智力</div>
                             <div className="text-lg font-bold text-green-800">{char.Intelligence}</div>
+                          </div>
+                          <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
+                            <div className="text-xs text-green-700">魅力</div>
+                            <div className="text-lg font-bold text-green-800">{char.Charm}</div>
                           </div>
                         </div>
                       </div>
@@ -420,26 +366,14 @@ export default function ProfilePage() {
                           <User className="w-4 h-4" />
                           统计信息
                         </h4>
-                        <div className="grid grid-cols-5 gap-2">
+                        <div className="grid grid-cols-2 gap-2">
                           <div className="bg-gray-50 rounded-lg p-2 text-center">
-                            <div className="text-xs text-gray-500">登录</div>
+                            <div className="text-xs text-gray-500">登录次数</div>
                             <div className="text-sm font-bold text-gray-700">{char.LoginCount}</div>
                           </div>
                           <div className="bg-gray-50 rounded-lg p-2 text-center">
-                            <div className="text-xs text-gray-500">死亡</div>
-                            <div className="text-sm font-bold text-gray-700">{char.DieCount}</div>
-                          </div>
-                          <div className="bg-gray-50 rounded-lg p-2 text-center">
-                            <div className="text-xs text-gray-500">PK胜</div>
-                            <div className="text-sm font-bold text-gray-700">{char.PKWinCount}</div>
-                          </div>
-                          <div className="bg-gray-50 rounded-lg p-2 text-center">
-                            <div className="text-xs text-gray-500">PK负</div>
-                            <div className="text-sm font-bold text-gray-700">{char.PKLoseCount}</div>
-                          </div>
-                          <div className="bg-gray-50 rounded-lg p-2 text-center">
-                            <div className="text-xs text-gray-500">PK次数</div>
-                            <div className="text-sm font-bold text-gray-700">{char.PKCount}</div>
+                            <div className="text-xs text-gray-500">死亡次数</div>
+                            <div className="text-sm font-bold text-gray-700">{char.DeadCount}</div>
                           </div>
                         </div>
                       </div>

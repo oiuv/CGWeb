@@ -8,9 +8,7 @@ export interface Character {
   Lv: number;
   Job: string;
   Hp: number;
-  MaxHp: number;
   Mp: number;
-  MaxMp: number;
   Exp: number;
   Gold: number;
   Fame: number;
@@ -20,28 +18,20 @@ export interface Character {
   Y: number;
   MainJob: number;
   GuildName?: string | null;
-  // 基础属性（金黄色，玩家分配点数）
+  // 基础属性（金黄色，玩家分配点数）- 需除以100
   Str: number;
   Vital: number;
+  Tough: number;
   Quick: number;
   Magic: number;
-  Power: number;
-  // 状态属性（青色）
-  Atk: number;
-  Def: number;
-  Agi: number;
-  Spirit: number;
-  Regenerate: number;
   // 其他属性（绿色）
+  Power: number;
   Dex: number;
   Intelligence: number;
   Charm: number;
   // 统计字段
   LoginCount: number;
-  DieCount: number;
-  PKWinCount: number;
-  PKLoseCount: number;
-  PKCount: number;
+  DeadCount: number;
 }
 
 export async function GET() {
@@ -49,14 +39,13 @@ export async function GET() {
     const session = await requireAuth();
     const accountGbk = utf8ToGbk(session.account);
 
-    // 查询角色信息 - 先查询原始数据
+    // 查询角色信息 - 只查询实际存在的字段
     const rawCharacters = await query<any>(
       `SELECT
         c.Name,
         c.Lv,
         c.MainJob,
         c.Hp,
-        c.MaxHp,
         c.ForcePoint,
         c.Exp,
         c.Gold,
@@ -67,22 +56,15 @@ export async function GET() {
         c.Y,
         c.Str,
         c.Vital,
+        c.Tough,
         c.Quick,
         c.Magic,
         c.Power,
         c.Dex,
         c.Intelligence,
         c.Charm,
-        c.Atk,
-        c.Def,
-        c.Agi,
-        c.Spirit,
-        c.Regenerate,
         c.LoginCount,
-        c.DieCount,
-        c.PKWinCount,
-        c.PKLoseCount,
-        c.PKCount,
+        c.DeadCount,
         g.guildName
        FROM tbl_character c
        LEFT JOIN tbl_guild g ON c.guildID = g.guildID
@@ -112,13 +94,11 @@ export async function GET() {
     };
 
     const formattedCharacters: Character[] = rawCharacters.map((char: any) => ({
-      Name: gbkToUtf8(char.Name), // 手动转换名称编码
+      Name: gbkToUtf8(char.Name),
       Lv: char.Lv,
       Job: jobNames[char.MainJob] || '未知',
       Hp: char.Hp,
-      MaxHp: char.MaxHp,
-      Mp: char.ForcePoint || 0, // 魔力
-      MaxMp: char.ForcePoint || 0,
+      Mp: char.ForcePoint,
       Exp: char.Exp,
       Gold: char.Gold,
       Fame: char.Fame,
@@ -131,25 +111,17 @@ export async function GET() {
       // 基础属性（金黄色）- 需除以100
       Str: Math.floor((char.Str || 0) / 100),
       Vital: Math.floor((char.Vital || 0) / 100),
+      Tough: Math.floor((char.Tough || 0) / 100),
       Quick: Math.floor((char.Quick || 0) / 100),
       Magic: Math.floor((char.Magic || 0) / 100),
-      Power: Math.floor((char.Power || 0) / 100),
-      // 状态属性（青色）
-      Atk: char.Atk || 0,
-      Def: char.Def || 0,
-      Agi: char.Agi || 0,
-      Spirit: char.Spirit || 0,
-      Regenerate: char.Regenerate || 0,
       // 其他属性（绿色）
+      Power: char.Power || 0,
       Dex: char.Dex || 0,
       Intelligence: char.Intelligence || 0,
       Charm: char.Charm || 0,
       // 统计
       LoginCount: char.LoginCount || 0,
-      DieCount: char.DieCount || 0,
-      PKWinCount: char.PKWinCount || 0,
-      PKLoseCount: char.PKLoseCount || 0,
-      PKCount: char.PKCount || 0,
+      DeadCount: char.DeadCount || 0,
     }));
 
     return NextResponse.json({
