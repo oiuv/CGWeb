@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Shield, User, LogIn, Gamepad2, Download } from 'lucide-react';
+import { Shield, User, LogIn, Gamepad2, Download, Star, Zap } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -77,30 +77,92 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* 游戏信息 */}
-          <div className="card mt-8 bg-gradient-to-r from-primary/5 to-accent-blue/10">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">游戏信息</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center gap-2">
-                <span className="badge badge-primary">服务器</span>
-                <span className="text-gray-700">IP:301:cg.gameivy.com:9030</span>
+          {/* 游戏信息和资料站点 */}
+          <div className="grid md:grid-cols-2 gap-6 mt-8">
+            {/* 游戏信息 */}
+            <div className="card bg-gradient-to-r from-primary/5 to-accent-blue/10">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">游戏信息</h3>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="badge badge-primary">服务器</span>
+                  <span className="text-gray-700">IP:301:cg.gameivy.com:9030</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="badge badge-secondary">QQ群</span>
+                  <span className="text-gray-700">6446640</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="badge badge-primary">客户端</span>
+                  <a href="https://down.cgmsv.com/cgtw_7.1_20220101.7z" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline flex items-center gap-1">
+                    <Download className="w-3 h-3" />
+                    cgtw_7.1_20220101.7z
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="badge badge-secondary">登录器</span>
+                  <a href="/downloads/cgmsv.zip" className="text-primary hover:underline flex items-center gap-1">
+                    <Download className="w-3 h-3" />
+                    cgmsv.zip
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="badge badge-primary">服务端</span>
+                  <a href="https://www.cgmsv.com/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline flex items-center gap-1">
+                    <Gamepad2 className="w-3 h-3" />
+                    cgmsv开源引擎
+                  </a>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="badge badge-secondary">QQ群</span>
-                <span className="text-gray-700">6446640</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="badge badge-primary">客户端</span>
-                <a href="https://down.cgmsv.com/cgtw_7.1_20220101.7z" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline flex items-center gap-1">
-                  <Download className="w-3 h-3" />
-                  cgtw_7.1_20220101.7z
+            </div>
+
+            {/* 资料站点导航 */}
+            <div className="card bg-gradient-to-r from-accent-pink/5 to-accent-blue/10">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">资料站点</h3>
+              <div className="space-y-2 text-sm">
+                <a href="https://www.crossgate.com.cn/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/50 transition-colors group">
+                  <div className="w-8 h-8 bg-accent-pink/10 rounded-lg flex items-center justify-center group-hover:bg-accent-pink/20">
+                    <Shield className="w-4 h-4 text-accent-pink" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-800">魔力宝贝国服官网</div>
+                    <div className="text-xs text-gray-500">官方网站</div>
+                  </div>
                 </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="badge badge-secondary">登录器</span>
-                <a href="/downloads/cgmsv.zip" className="text-primary hover:underline flex items-center gap-1">
-                  <Download className="w-3 h-3" />
-                  cgmsv.zip
+                <a href="https://cg.17173.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/50 transition-colors group">
+                  <div className="w-8 h-8 bg-accent-blue/10 rounded-lg flex items-center justify-center group-hover:bg-accent-blue/20">
+                    <User className="w-4 h-4 text-accent-blue" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-800">魔力宝贝17173专区</div>
+                    <div className="text-xs text-gray-500">游戏资讯资料库</div>
+                  </div>
+                </a>
+                <a href="https://games.sina.com.cn/zhuanqu/cross/indexpage.shtml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/50 transition-colors group">
+                  <div className="w-8 h-8 bg-yellow/10 rounded-lg flex items-center justify-center group-hover:bg-yellow/20">
+                    <Star className="w-4 h-4 text-yellow-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-800">魔力宝贝新浪专区</div>
+                    <div className="text-xs text-gray-500">历史资料站</div>
+                  </div>
+                </a>
+                <a href="https://cg.skyey.tw/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/50 transition-colors group">
+                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200">
+                    <Download className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-800">魔力宝贝蔚蓝幻境</div>
+                    <div className="text-xs text-gray-500">台服资料站</div>
+                  </div>
+                </a>
+                <a href="https://cgsword.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-2 rounded-lg hover:bg-white/50 transition-colors group">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200">
+                    <Zap className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-800">魔力宝贝御剑轩</div>
+                    <div className="text-xs text-gray-500">游戏资料库</div>
+                  </div>
                 </a>
               </div>
             </div>
