@@ -44,6 +44,11 @@ interface Character {
   Dex: number;
   Intelligence: number;
   Charm: number;
+  // 元素属性
+  Attrib_Earth: number;
+  Attrib_Water: number;
+  Attrib_Fire: number;
+  Attrib_Wind: number;
   // 统计
   LoginCount: number;
   DeadCount: number;
@@ -345,7 +350,7 @@ export default function ProfilePage() {
                         </h4>
                         <div className="grid grid-cols-4 gap-2">
                           <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
-                            <div className="text-xs text-green-700">腕力</div>
+                            <div className="text-xs text-green-700">耐力</div>
                             <div className="text-lg font-bold text-green-800">{char.Power}</div>
                           </div>
                           <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
@@ -359,6 +364,68 @@ export default function ProfilePage() {
                           <div className="bg-green-50 border border-green-200 rounded-lg p-2 text-center">
                             <div className="text-xs text-green-700">魅力</div>
                             <div className="text-lg font-bold text-green-800">{char.Charm}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 元素属性 */}
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+                          <Star className="w-4 h-4" />
+                          元素属性
+                        </h4>
+                        <div className="space-y-2">
+                          {/* 地 - 绿色 */}
+                          <div>
+                            <div className="flex items-center justify-between text-xs mb-1">
+                              <span className="text-green-700">地</span>
+                              <span className="text-green-800 font-medium">{char.Attrib_Earth}</span>
+                            </div>
+                            <div className="w-full bg-green-200 rounded-full h-2">
+                              <div
+                                className="bg-green-500 h-2 rounded-full transition-all"
+                                style={{ width: `${Math.min(char.Attrib_Earth, 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                          {/* 水 - 浅蓝色 */}
+                          <div>
+                            <div className="flex items-center justify-between text-xs mb-1">
+                              <span className="text-sky-600">水</span>
+                              <span className="text-sky-700 font-medium">{char.Attrib_Water}</span>
+                            </div>
+                            <div className="w-full bg-sky-200 rounded-full h-2">
+                              <div
+                                className="bg-sky-500 h-2 rounded-full transition-all"
+                                style={{ width: `${Math.min(char.Attrib_Water, 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                          {/* 火 - 橙红色 */}
+                          <div>
+                            <div className="flex items-center justify-between text-xs mb-1">
+                              <span className="text-orange-600">火</span>
+                              <span className="text-orange-700 font-medium">{char.Attrib_Fire}</span>
+                            </div>
+                            <div className="w-full bg-orange-200 rounded-full h-2">
+                              <div
+                                className="bg-orange-500 h-2 rounded-full transition-all"
+                                style={{ width: `${Math.min(char.Attrib_Fire, 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                          {/* 風 - 黄色 */}
+                          <div>
+                            <div className="flex items-center justify-between text-xs mb-1">
+                              <span className="text-yellow-600">風</span>
+                              <span className="text-yellow-700 font-medium">{char.Attrib_Wind}</span>
+                            </div>
+                            <div className="w-full bg-yellow-200 rounded-full h-2">
+                              <div
+                                className="bg-yellow-500 h-2 rounded-full transition-all"
+                                style={{ width: `${Math.min(char.Attrib_Wind, 100)}%` }}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -397,7 +464,7 @@ export default function ProfilePage() {
                     {/* 当前位置 */}
                     <div className="flex items-center gap-2 text-sm text-gray-500 pt-3 border-t border-gray-100">
                       <MapPin className="w-4 h-4" />
-                      <span>地图 {char.MapId} - {char.Floor}层</span>
+                      <span>地图 {char.MapId} - {char.Floor}</span>
                       <span className="text-gray-400">({char.X}, {char.Y})</span>
                     </div>
                   </div>
